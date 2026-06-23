@@ -1,0 +1,556 @@
+reg test_rw_0 {
+    name = "TEST_RW_0";
+    desc = "Test register RW 0";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_1 {
+    name = "TEST_RW_1";
+    desc = "Test register RW 1";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_2 {
+    name = "TEST_RW_2";
+    desc = "Test register RW 2";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_3 {
+    name = "TEST_RW_3";
+    desc = "Test register RW 3";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_4 {
+    name = "TEST_RW_4";
+    desc = "Test register RW 4";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_5 {
+    name = "TEST_RW_5";
+    desc = "Test register RW 5";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_6 {
+    name = "TEST_RW_6";
+    desc = "Test register RW 6";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_7 {
+    name = "TEST_RW_7";
+    desc = "Test register RW 7";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_8 {
+    name = "TEST_RW_8";
+    desc = "Test register RW 8";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_9 {
+    name = "TEST_RW_9";
+    desc = "Test register RW 9";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_10 {
+    name = "TEST_RW_10";
+    desc = "Test register RW 10";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_11 {
+    name = "TEST_RW_11";
+    desc = "Test register RW 11";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_12 {
+    name = "TEST_RW_12";
+    desc = "Test register RW 12";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_13 {
+    name = "TEST_RW_13";
+    desc = "Test register RW 13";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_14 {
+    name = "TEST_RW_14";
+    desc = "Test register RW 14";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_rw_15 {
+    name = "TEST_RW_15";
+    desc = "Test register RW 15";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+// =============================================================================
+// Группа 2: 16 регистров W (TEST_W_0 .. TEST_W_15)
+// Программный доступ: только запись, аппаратный доступ: чтение
+// =============================================================================
+
+reg test_w_0 {
+    name = "TEST_W_0";
+    desc = "Test register W 0";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_1 {
+    name = "TEST_W_1";
+    desc = "Test register W 1";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_2 {
+    name = "TEST_W_2";
+    desc = "Test register W 2";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_3 {
+    name = "TEST_W_3";
+    desc = "Test register W 3";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_4 {
+    name = "TEST_W_4";
+    desc = "Test register W 4";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_5 {
+    name = "TEST_W_5";
+    desc = "Test register W 5";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_6 {
+    name = "TEST_W_6";
+    desc = "Test register W 6";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_7 {
+    name = "TEST_W_7";
+    desc = "Test register W 7";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_8 {
+    name = "TEST_W_8";
+    desc = "Test register W 8";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_9 {
+    name = "TEST_W_9";
+    desc = "Test register W 9";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_10 {
+    name = "TEST_W_10";
+    desc = "Test register W 10";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_11 {
+    name = "TEST_W_11";
+    desc = "Test register W 11";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_12 {
+    name = "TEST_W_12";
+    desc = "Test register W 12";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_13 {
+    name = "TEST_W_13";
+    desc = "Test register W 13";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_14 {
+    name = "TEST_W_14";
+    desc = "Test register W 14";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_w_15 {
+    name = "TEST_W_15";
+    desc = "Test register W 15";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = w;
+    default hw = r;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+// =============================================================================
+// Группа 3: 16 регистров R (TEST_R_0 .. TEST_R_15)
+// Программный доступ: только чтение, аппаратный доступ: запись
+// =============================================================================
+
+reg test_r_0 {
+    name = "TEST_R_0";
+    desc = "Test register R 0";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_1 {
+    name = "TEST_R_1";
+    desc = "Test register R 1";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_2 {
+    name = "TEST_R_2";
+    desc = "Test register R 2";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_3 {
+    name = "TEST_R_3";
+    desc = "Test register R 3";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_4 {
+    name = "TEST_R_4";
+    desc = "Test register R 4";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_5 {
+    name = "TEST_R_5";
+    desc = "Test register R 5";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_6 {
+    name = "TEST_R_6";
+    desc = "Test register R 6";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_7 {
+    name = "TEST_R_7";
+    desc = "Test register R 7";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_8 {
+    name = "TEST_R_8";
+    desc = "Test register R 8";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_9 {
+    name = "TEST_R_9";
+    desc = "Test register R 9";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_10 {
+    name = "TEST_R_10";
+    desc = "Test register R 10";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_11 {
+    name = "TEST_R_11";
+    desc = "Test register R 11";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_12 {
+    name = "TEST_R_12";
+    desc = "Test register R 12";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_13 {
+    name = "TEST_R_13";
+    desc = "Test register R 13";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_14 {
+    name = "TEST_R_14";
+    desc = "Test register R 14";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+reg test_r_15 {
+    name = "TEST_R_15";
+    desc = "Test register R 15";
+    regwidth = 32;
+    accesswidth = 32;
+    default sw = r;
+    default hw = w;
+    field { name = "Test data field"; reset = 0; } data [32];
+};
+
+// =============================================================================
+// Адресная карта регистров pkt2axil
+// =============================================================================
+
+addrmap pkt2axil_regmap {
+    name = "pkt2axil Register Map";
+    desc = "Register map for pkt-to-axil IP core test registers";
+    default regwidth = 32;
+    default accesswidth = 32;
+    default sw = rw;
+    default hw = r;
+
+    // Группа 1: RW регистры @ 0x00 - 0x3C
+    test_rw_0  test_rw_0  @ 0x00;
+    test_rw_1  test_rw_1  @ 0x04;
+    test_rw_2  test_rw_2  @ 0x08;
+    test_rw_3  test_rw_3  @ 0x0C;
+    test_rw_4  test_rw_4  @ 0x10;
+    test_rw_5  test_rw_5  @ 0x14;
+    test_rw_6  test_rw_6  @ 0x18;
+    test_rw_7  test_rw_7  @ 0x1C;
+    test_rw_8  test_rw_8  @ 0x20;
+    test_rw_9  test_rw_9  @ 0x24;
+    test_rw_10 test_rw_10 @ 0x28;
+    test_rw_11 test_rw_11 @ 0x2C;
+    test_rw_12 test_rw_12 @ 0x30;
+    test_rw_13 test_rw_13 @ 0x34;
+    test_rw_14 test_rw_14 @ 0x38;
+    test_rw_15 test_rw_15 @ 0x3C;
+
+    // Группа 2: W регистры @ 0x40 - 0x7C
+    test_w_0   test_w_0   @ 0x40;
+    test_w_1   test_w_1   @ 0x44;
+    test_w_2   test_w_2   @ 0x48;
+    test_w_3   test_w_3   @ 0x4C;
+    test_w_4   test_w_4   @ 0x50;
+    test_w_5   test_w_5   @ 0x54;
+    test_w_6   test_w_6   @ 0x58;
+    test_w_7   test_w_7   @ 0x5C;
+    test_w_8   test_w_8   @ 0x60;
+    test_w_9   test_w_9   @ 0x64;
+    test_w_10  test_w_10  @ 0x68;
+    test_w_11  test_w_11  @ 0x6C;
+    test_w_12  test_w_12  @ 0x70;
+    test_w_13  test_w_13  @ 0x74;
+    test_w_14  test_w_14  @ 0x78;
+    test_w_15  test_w_15  @ 0x7C;
+
+    // Группа 3: R регистры @ 0x80 - 0xBC
+    test_r_0   test_r_0   @ 0x80;
+    test_r_1   test_r_1   @ 0x84;
+    test_r_2   test_r_2   @ 0x88;
+    test_r_3   test_r_3   @ 0x8C;
+    test_r_4   test_r_4   @ 0x90;
+    test_r_5   test_r_5   @ 0x94;
+    test_r_6   test_r_6   @ 0x98;
+    test_r_7   test_r_7   @ 0x9C;
+    test_r_8   test_r_8   @ 0xA0;
+    test_r_9   test_r_9   @ 0xA4;
+    test_r_10  test_r_10  @ 0xA8;
+    test_r_11  test_r_11  @ 0xAC;
+    test_r_12  test_r_12  @ 0xB0;
+    test_r_13  test_r_13  @ 0xB4;
+    test_r_14  test_r_14  @ 0xB8;
+    test_r_15  test_r_15  @ 0xBC;
+};
