@@ -1,0 +1,448 @@
+module pkt2axil_binder #(
+    parameter  int TDATA_WIDTH = 64,
+    parameter  int TUSER_WIDTH = 8,
+    localparam int TKEEP_WIDTH = TDATA_WIDTH / 8
+) 
+(
+    input    logic                   clk           ,
+    input    logic                   rstn          ,
+
+    output   logic [TDATA_WIDTH-1:0] m_axis_tdata  ,
+    output   logic [TKEEP_WIDTH-1:0] m_axis_tkeep  ,
+    output   logic [TUSER_WIDTH-1:0] m_axis_tuser  , 
+    output   logic                   m_axis_tvalid ,
+    input    logic                   m_axis_tready ,
+    output   logic                   m_axis_tlast  ,
+
+    input    logic             [1:0] axil_bresp    ,
+    input    logic                   axil_bvalid  ,
+    output   logic                   axil_bready  ,
+
+    input    logic            [31:0] axil_rdata   ,
+    input    logic             [1:0] axil_rresp   ,
+    input    logic                   axil_rvalid  ,
+    output   logic                   axil_rready  ,
+    
+    input    logic                   error_flag    ,
+    input    logic             [1:0] error_code    ,
+    input    logic                   last_transaction,
+    input    logic            [31:0] axil_awaddr   ,
+    input    logic                   axil_awvalid  ,
+    input    logic                   axil_awready  ,
+    input    logic            [31:0] axil_araddr   ,
+    input    logic                   axil_arvalid  ,
+    input    logic                   axil_arready
+
+);
+
+typedef enum logic [2:0] {
+    IDLE,
+    WRITE,
+    READ,
+    AWAIT,
+    SEND_END_OF_BATCH
+} state_t;
+
+state_t state, next_state;
+
+logic [31:0] stored_addr;
+logic [1:0]  stored_trans_type;
+logic [1:0]  stored_resp;
+logic [2:0]  current_resp_offset;
+logic [2:0]  next_resp_offset;
+logic [6:0] [15:0] ring_buffer;
+logic end_of_batch;
+logic [4:0] await_timeout;
+logic first_trans_flag;
+logic is_last_transaction;
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        await_timeout <= '0;
+    end
+    else if (state == AWAIT) begin
+        await_timeout <= await_timeout + 1;
+    end
+    else if (state == SEND_END_OF_BATCH) begin
+        await_timeout <= await_timeout + 1;
+    end
+    else begin
+        await_timeout <= '0;
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        end_of_batch <= 1'b0;
+    end
+    else if (state == IDLE ) begin
+        end_of_batch <= 1'b0;
+    end
+    else if((state == READ || state == WRITE) &&  current_resp_offset == 3'h6) begin
+        end_of_batch <= 1'b1;
+    end
+
+    else if (state == SEND_END_OF_BATCH) begin
+        // В SEND_END_OF_BATCH всегда происходит переход в READ, WRITE или IDLE
+        // Убираем зависимость от next_state для уменьшения комбинаторных цепей
+        end_of_batch <= 1'b0;
+    end
+end
+
+
+logic [1:0] end_of_batch_read_write_flag;
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        end_of_batch_read_write_flag <= '0;
+    end else if (state == AWAIT && end_of_batch && axil_awvalid) begin
+        // Переход в SEND_END_OF_BATCH происходит когда end_of_batch и есть новая транзакция
+        end_of_batch_read_write_flag <= 2'b10;
+    end else if (state == AWAIT && end_of_batch && axil_arvalid) begin
+        end_of_batch_read_write_flag <= 2'b01;
+    end else begin
+        end_of_batch_read_write_flag <= '0;
+    end
+end
+
+
+always_comb begin
+    next_state = state;
+    
+    case (state)
+        IDLE: begin
+            if (axil_awvalid && axil_awready) begin
+                next_state = WRITE;
+            end else if (axil_arvalid && axil_arready) begin
+                next_state = READ;
+            end
+        end
+        
+        WRITE: begin
+            if (axil_bvalid && axil_bready) begin
+                next_state = AWAIT;
+            end
+        end
+        
+        READ: begin
+            if (axil_rvalid && axil_rready) begin
+                next_state = AWAIT;
+            end
+        end
+        
+        AWAIT: begin
+            if (!m_axis_tvalid) begin
+                if (((axil_awvalid && axil_awready) || (axil_arvalid && axil_arready)) && end_of_batch) begin
+                    next_state = SEND_END_OF_BATCH;
+                end else if (axil_arready && axil_arvalid) begin
+                    next_state = READ;
+                end else if (axil_awvalid && axil_awready) begin
+                    next_state = WRITE;
+                end else if (is_last_transaction || end_of_batch) begin
+                    next_state = SEND_END_OF_BATCH;
+                end
+            end else if (((axil_arvalid && axil_arready) || (axil_awvalid && axil_awready)) && end_of_batch) begin
+                next_state = SEND_END_OF_BATCH;
+            end else if (axil_awready && axil_awvalid) begin
+                next_state = WRITE;
+            end else if (axil_arvalid && axil_arready) begin
+                next_state = READ;
+            end else if (await_timeout == 5'h1F) begin
+                next_state = IDLE;
+            end else begin
+                next_state = AWAIT;
+            end
+        end
+        SEND_END_OF_BATCH: begin
+            if (end_of_batch_read_write_flag == 2'b10) begin
+                next_state = WRITE;
+            end else if (end_of_batch_read_write_flag == 2'b01) begin
+                next_state = READ;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        default: begin
+            next_state = IDLE;
+        end
+    endcase
+end
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        state <= IDLE;
+    end else begin
+        state <= next_state;
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        current_resp_offset <= 3'h0;
+        next_resp_offset <= 3'h2;
+    end else begin
+        if ((state == AWAIT && (next_state == WRITE || next_state == READ || next_state == SEND_END_OF_BATCH) && !first_trans_flag)) begin
+            current_resp_offset <= next_resp_offset;
+            next_resp_offset <= (next_resp_offset + 3'd10) & 3'h7;
+        end
+
+        if (state == IDLE) begin
+            current_resp_offset <= 3'h0;
+            next_resp_offset <= 3'h2;
+        end
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        stored_resp <= 2'b0;
+    end else begin
+        if (state == WRITE && axil_bvalid && axil_bready) begin
+            stored_resp <= axil_bresp;
+        end
+        if (state == READ && axil_rvalid && axil_rready) begin
+            stored_resp <= axil_rresp;
+        end
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        stored_addr <= 32'h0;
+        stored_trans_type <= 2'b00;
+    end else begin
+        if (axil_awready && axil_awvalid) begin
+            stored_addr <= axil_awaddr;
+            stored_trans_type <= 2'b11;
+        end else if (axil_arready && axil_arvalid) begin
+            stored_addr <= axil_araddr;
+            stored_trans_type <= 2'b01;
+        end else if ((state == WRITE && axil_bvalid && axil_bready && error_flag) || 
+                     (state == READ && axil_rvalid && axil_rready && error_flag)) begin
+            stored_trans_type <= 2'b00;
+        end
+    end
+end
+
+logic [79:0] resp_comb;
+
+always_comb begin
+    if (stored_trans_type == 2'b11) begin
+        resp_comb = {
+            8'hEE,
+            8'hEE,
+            8'hEE,
+            8'hEE,
+            stored_addr[31:24],
+            stored_addr[23:16],
+            stored_addr[15:8],
+            stored_addr[7:0],
+            {6'b0, axil_bresp},
+            {6'b0, 2'b11}
+        };
+    end else if (stored_trans_type == 2'b01) begin
+        resp_comb = {
+            axil_rdata[31:24],
+            axil_rdata[23:16],
+            axil_rdata[15:8],
+            axil_rdata[7:0],
+            stored_addr[31:24],
+            stored_addr[23:16],
+            stored_addr[15:8],
+            stored_addr[7:0],
+            {6'b0, axil_rresp},
+            {6'b0, 2'b01}
+        };
+    end else begin
+        resp_comb = {
+            8'hEE,
+            8'hEE,
+            8'hEE,
+            8'hEE,
+            stored_addr[31:24],
+            stored_addr[23:16],
+            stored_addr[15:8],
+            stored_addr[7:0],
+            {6'b0, axil_bresp},
+            {6'b0, 2'b00}
+        };
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        ring_buffer <= '0;
+    end else if ((state == WRITE && axil_bvalid && axil_bready) || (state == READ && axil_rvalid && axil_rready)) begin
+            case (current_resp_offset)
+                3'h0: begin  
+                    ring_buffer[0] <= resp_comb[79:64];
+                    ring_buffer[1] <= 16'h0;
+                    ring_buffer[2] <= 16'h0;
+                end
+                3'h2: begin
+                    ring_buffer[1] <= 16'h0;
+                    ring_buffer[2] <= 16'h0;
+                    ring_buffer[3] <= 16'h0;
+                    ring_buffer[4] <= 16'h0;
+                    ring_buffer[5] <= resp_comb[63:48];
+                    ring_buffer[6] <= resp_comb[79:64];
+                end
+                3'h4: begin
+                    ring_buffer[0] <= resp_comb[47:32];
+                    ring_buffer[1] <= resp_comb[63:48];
+                    ring_buffer[2] <= resp_comb[79:64];
+                    ring_buffer[3] <= 16'h0;
+                    ring_buffer[4] <= 16'h0;
+                end
+                3'h6: begin
+                    ring_buffer[3] <= resp_comb[31:16];
+                    ring_buffer[4] <= resp_comb[47:32];
+                    ring_buffer[5] <= resp_comb[63:48];
+                    ring_buffer[6] <= resp_comb[79:64];
+                end
+                default: begin
+                    ring_buffer <= '0;
+                end
+            endcase
+        end else if (state == IDLE && m_axis_tvalid && m_axis_tready) begin
+            case (current_resp_offset)
+                3'h0: begin
+                    ring_buffer[0] <= 16'h0;
+                end
+                3'h2: begin
+                    ring_buffer[5] <= 16'h0;
+                    ring_buffer[6] <= 16'h0;
+                end
+                3'h4: begin
+                    ring_buffer[0] <= 16'h0;
+                    ring_buffer[1] <= 16'h0;
+                    ring_buffer[2] <= 16'h0;
+                end
+                3'h6: begin
+                    ring_buffer[3] <= 16'h0;
+                    ring_buffer[4] <= 16'h0;
+                    ring_buffer[5] <= 16'h0;
+                    ring_buffer[6] <= 16'h0;
+                end
+                default: begin
+                    ring_buffer[0] <= 16'h0;
+                end
+            endcase
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        first_trans_flag <= 1'b1;
+    end else if (state == AWAIT && m_axis_tvalid && m_axis_tready && !m_axis_tlast) begin
+        first_trans_flag <= 1'b0;
+    end else if (state == AWAIT && m_axis_tvalid && m_axis_tready && m_axis_tlast) begin
+        first_trans_flag <= 1'b1;
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        m_axis_tdata <= '0;
+        m_axis_tkeep <= '0;
+    end
+    else if (state == AWAIT && end_of_batch && !is_last_transaction) begin
+        // Переход в SEND_END_OF_BATCH происходит когда end_of_batch установлен
+        // Убираем зависимость от next_state для уменьшения комбинаторных цепей
+        m_axis_tdata <= {ring_buffer[6], ring_buffer[5], ring_buffer[4], ring_buffer[3]};
+        m_axis_tkeep <= 8'hFF;
+    end else if (state == AWAIT && (end_of_batch || is_last_transaction)) begin
+        case (current_resp_offset)
+            3'h0: begin
+                m_axis_tdata <= {48'h0, ring_buffer[0]};
+                m_axis_tkeep <= 8'h03;
+            end
+            3'h2: begin
+                m_axis_tdata <= {32'h0, ring_buffer[6], ring_buffer[5]};
+                m_axis_tkeep <= 8'h0F;
+            end
+            3'h4: begin
+                m_axis_tdata <= {16'h0, ring_buffer[3], ring_buffer[2], ring_buffer[1], ring_buffer[0]};
+                m_axis_tkeep <= 8'h3F;
+            end
+            3'h6: begin
+                m_axis_tdata <= {ring_buffer[6], ring_buffer[5], ring_buffer[4], ring_buffer[3]};
+                m_axis_tkeep <= 8'hFF;
+            end
+            default: begin
+                m_axis_tdata <= 64'h0;
+                m_axis_tkeep <= 8'h00;
+            end
+        endcase
+    end else if ((state == WRITE && axil_bvalid && axil_bready) || (state == READ && axil_rvalid && axil_rready)) begin
+        case (current_resp_offset)
+            3'h0: begin
+                m_axis_tdata <= resp_comb[63:0];
+                m_axis_tkeep <= 8'hFF;
+            end
+            3'h2: begin
+                m_axis_tdata <= {resp_comb[47:0], ring_buffer[0]};
+                m_axis_tkeep <= 8'hFF;
+            end
+            3'h4: begin
+                m_axis_tdata <= {resp_comb[31:0], ring_buffer[6], ring_buffer[5]};
+                m_axis_tkeep <= 8'hFF;
+            end
+            3'h6: begin
+                m_axis_tdata <= {resp_comb[15:0], ring_buffer[2], ring_buffer[1], ring_buffer[0]};
+                m_axis_tkeep <= 8'hFF;
+            end
+            default: begin
+                m_axis_tdata <= resp_comb[63:0];
+                m_axis_tkeep <= 8'hFF;
+            end
+        endcase
+    end
+end
+
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        is_last_transaction <= 1'b0;
+    end else if ((axil_awvalid && axil_awready) || (axil_arvalid && axil_arready)) begin
+        is_last_transaction <= last_transaction;
+    end else if (m_axis_tvalid && m_axis_tready && m_axis_tlast) begin
+        is_last_transaction <= 1'b0;
+    end
+end
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        m_axis_tlast <= '0;
+    end else begin
+        if (state == AWAIT && is_last_transaction) begin
+            m_axis_tlast <= 1'b1;
+        end else if (m_axis_tvalid && m_axis_tready && m_axis_tlast) begin
+            m_axis_tlast <= '0;
+        end else if (next_state == SEND_END_OF_BATCH && is_last_transaction) begin
+            m_axis_tlast <= 1'b1;
+        end else begin
+            m_axis_tlast <= '0;
+        end
+    end
+end
+
+assign axil_bready = (state == WRITE);
+assign axil_rready = (state == READ);
+
+always_ff @(posedge clk or negedge rstn) begin
+    if (!rstn) begin
+        m_axis_tvalid <= '0;
+    end else begin
+        if (next_state == SEND_END_OF_BATCH) begin
+            m_axis_tvalid <= 1'b1;
+        end else if (m_axis_tvalid && m_axis_tready) begin
+            m_axis_tvalid <= 1'b0;
+        end else if ((state == WRITE && axil_bvalid && axil_bready) || (state == READ && axil_rvalid && axil_rready)) begin
+            m_axis_tvalid <= 1'b1;
+        end else if ((state == AWAIT || state == SEND_END_OF_BATCH) && !m_axis_tvalid && await_timeout == 5'h1F) begin
+            m_axis_tvalid <= 1'b1;
+        end
+    end
+end
+
+endmodule

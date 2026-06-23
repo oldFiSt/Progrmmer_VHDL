@@ -1,0 +1,533 @@
+regmap:
+# Группа 1: 16 регистров RW (5-й бит адреса = 0)
+-   name: TEST_RW_0
+    description: Test register RW 0
+    address: 0
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_1
+    description: Test register RW 1
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_2
+    description: Test register RW 2
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_3
+    description: Test register RW 3
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_4
+    description: Test register RW 4
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_5
+    description: Test register RW 5
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_6
+    description: Test register RW 6
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_7
+    description: Test register RW 7
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_8
+    description: Test register RW 8
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_9
+    description: Test register RW 9
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_10
+    description: Test register RW 10
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_11
+    description: Test register RW 11
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_12
+    description: Test register RW 12
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_13
+    description: Test register RW 13
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_14
+    description: Test register RW 14
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+-   name: TEST_RW_15
+    description: Test register RW 15
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: rw
+        hardware: o
+        enums: []
+# Группа 2: 16 регистров W (5-й бит адреса = 0, но следующие адреса)
+-   name: TEST_W_0
+    description: Test register W 0
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_1
+    description: Test register W 1
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_2
+    description: Test register W 2
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_3
+    description: Test register W 3
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_4
+    description: Test register W 4
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_5
+    description: Test register W 5
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_6
+    description: Test register W 6
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_7
+    description: Test register W 7
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_8
+    description: Test register W 8
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_9
+    description: Test register W 9
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_10
+    description: Test register W 10
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_11
+    description: Test register W 11
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_12
+    description: Test register W 12
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_13
+    description: Test register W 13
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_14
+    description: Test register W 14
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+-   name: TEST_W_15
+    description: Test register W 15
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: wo
+        hardware: o
+        enums: []
+# Группа 3: 16 регистров R (5-й бит адреса = 1)
+-   name: TEST_R_0
+    description: Test register R 0
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_1
+    description: Test register R 1
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_2
+    description: Test register R 2
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_3
+    description: Test register R 3
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_4
+    description: Test register R 4
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_5
+    description: Test register R 5
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_6
+    description: Test register R 6
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_7
+    description: Test register R 7
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_8
+    description: Test register R 8
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_9
+    description: Test register R 9
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_10
+    description: Test register R 10
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_11
+    description: Test register R 11
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_12
+    description: Test register R 12
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_13
+    description: Test register R 13
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_14
+    description: Test register R 14
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []
+-   name: TEST_R_15
+    description: Test register R 15
+    bitfields:
+    -   name: data
+        description: Test data field
+        reset: 0
+        width: 32
+        lsb: 0
+        access: ro
+        hardware: i
+        enums: []

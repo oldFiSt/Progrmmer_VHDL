@@ -1,0 +1,1039 @@
+== Register map
+
+Created with https://github.com/esynr3z/corsair[Corsair] v1.0.4.
+
+=== Conventions
+
+[#table-Register_access_modes,cols="1,1", options="header"]
+|==========================
+| Access mode | Description
+| rw          | Read and Write
+| rw1c        | Read and Write 1 to Clear
+| rw1s        | Read and Write 1 to Set
+| ro          | Read Only
+| roc         | Read Only to Clear
+| roll        | Read Only / Latch Low
+| rolh        | Read Only / Latch High
+| wo          | Write only
+| wosc        | Write Only / Self Clear
+|==========================
+
+[[register_map_summary]]
+=== Register map summary
+
+Base address: 0x00000000
+
+[#table-Register_map,cols="1,1,1", options="header"]
+|==========================
+| Name | Address | Description
+| <<TEST_RW_0>>            | 0x0000     | Test register RW 0
+| <<TEST_RW_1>>            | 0x0004     | Test register RW 1
+| <<TEST_RW_2>>            | 0x0008     | Test register RW 2
+| <<TEST_RW_3>>            | 0x000c     | Test register RW 3
+| <<TEST_RW_4>>            | 0x0010     | Test register RW 4
+| <<TEST_RW_5>>            | 0x0014     | Test register RW 5
+| <<TEST_RW_6>>            | 0x0018     | Test register RW 6
+| <<TEST_RW_7>>            | 0x001c     | Test register RW 7
+| <<TEST_RW_8>>            | 0x0020     | Test register RW 8
+| <<TEST_RW_9>>            | 0x0024     | Test register RW 9
+| <<TEST_RW_10>>           | 0x0028     | Test register RW 10
+| <<TEST_RW_11>>           | 0x002c     | Test register RW 11
+| <<TEST_RW_12>>           | 0x0030     | Test register RW 12
+| <<TEST_RW_13>>           | 0x0034     | Test register RW 13
+| <<TEST_RW_14>>           | 0x0038     | Test register RW 14
+| <<TEST_RW_15>>           | 0x003c     | Test register RW 15
+| <<TEST_W_0>>             | 0x0040     | Test register W 0
+| <<TEST_W_1>>             | 0x0044     | Test register W 1
+| <<TEST_W_2>>             | 0x0048     | Test register W 2
+| <<TEST_W_3>>             | 0x004c     | Test register W 3
+| <<TEST_W_4>>             | 0x0050     | Test register W 4
+| <<TEST_W_5>>             | 0x0054     | Test register W 5
+| <<TEST_W_6>>             | 0x0058     | Test register W 6
+| <<TEST_W_7>>             | 0x005c     | Test register W 7
+| <<TEST_W_8>>             | 0x0060     | Test register W 8
+| <<TEST_W_9>>             | 0x0064     | Test register W 9
+| <<TEST_W_10>>            | 0x0068     | Test register W 10
+| <<TEST_W_11>>            | 0x006c     | Test register W 11
+| <<TEST_W_12>>            | 0x0070     | Test register W 12
+| <<TEST_W_13>>            | 0x0074     | Test register W 13
+| <<TEST_W_14>>            | 0x0078     | Test register W 14
+| <<TEST_W_15>>            | 0x007c     | Test register W 15
+| <<TEST_R_0>>             | 0x0080     | Test register R 0
+| <<TEST_R_1>>             | 0x0084     | Test register R 1
+| <<TEST_R_2>>             | 0x0088     | Test register R 2
+| <<TEST_R_3>>             | 0x008c     | Test register R 3
+| <<TEST_R_4>>             | 0x0090     | Test register R 4
+| <<TEST_R_5>>             | 0x0094     | Test register R 5
+| <<TEST_R_6>>             | 0x0098     | Test register R 6
+| <<TEST_R_7>>             | 0x009c     | Test register R 7
+| <<TEST_R_8>>             | 0x00a0     | Test register R 8
+| <<TEST_R_9>>             | 0x00a4     | Test register R 9
+| <<TEST_R_10>>            | 0x00a8     | Test register R 10
+| <<TEST_R_11>>            | 0x00ac     | Test register R 11
+| <<TEST_R_12>>            | 0x00b0     | Test register R 12
+| <<TEST_R_13>>            | 0x00b4     | Test register R 13
+| <<TEST_R_14>>            | 0x00b8     | Test register R 14
+| <<TEST_R_15>>            | 0x00bc     | Test register R 15
+|==========================
+
+
+
+[[TEST_RW_0]]
+=== TEST_RW_0
+
+Test register RW 0
+
+Address offset: 0x0000
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_0.svg[test_rw_0]
+
+[#table-TEST_RW_0,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_1]]
+=== TEST_RW_1
+
+Test register RW 1
+
+Address offset: 0x0004
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_1.svg[test_rw_1]
+
+[#table-TEST_RW_1,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_2]]
+=== TEST_RW_2
+
+Test register RW 2
+
+Address offset: 0x0008
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_2.svg[test_rw_2]
+
+[#table-TEST_RW_2,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_3]]
+=== TEST_RW_3
+
+Test register RW 3
+
+Address offset: 0x000c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_3.svg[test_rw_3]
+
+[#table-TEST_RW_3,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_4]]
+=== TEST_RW_4
+
+Test register RW 4
+
+Address offset: 0x0010
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_4.svg[test_rw_4]
+
+[#table-TEST_RW_4,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_5]]
+=== TEST_RW_5
+
+Test register RW 5
+
+Address offset: 0x0014
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_5.svg[test_rw_5]
+
+[#table-TEST_RW_5,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_6]]
+=== TEST_RW_6
+
+Test register RW 6
+
+Address offset: 0x0018
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_6.svg[test_rw_6]
+
+[#table-TEST_RW_6,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_7]]
+=== TEST_RW_7
+
+Test register RW 7
+
+Address offset: 0x001c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_7.svg[test_rw_7]
+
+[#table-TEST_RW_7,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_8]]
+=== TEST_RW_8
+
+Test register RW 8
+
+Address offset: 0x0020
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_8.svg[test_rw_8]
+
+[#table-TEST_RW_8,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_9]]
+=== TEST_RW_9
+
+Test register RW 9
+
+Address offset: 0x0024
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_9.svg[test_rw_9]
+
+[#table-TEST_RW_9,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_10]]
+=== TEST_RW_10
+
+Test register RW 10
+
+Address offset: 0x0028
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_10.svg[test_rw_10]
+
+[#table-TEST_RW_10,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_11]]
+=== TEST_RW_11
+
+Test register RW 11
+
+Address offset: 0x002c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_11.svg[test_rw_11]
+
+[#table-TEST_RW_11,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_12]]
+=== TEST_RW_12
+
+Test register RW 12
+
+Address offset: 0x0030
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_12.svg[test_rw_12]
+
+[#table-TEST_RW_12,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_13]]
+=== TEST_RW_13
+
+Test register RW 13
+
+Address offset: 0x0034
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_13.svg[test_rw_13]
+
+[#table-TEST_RW_13,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_14]]
+=== TEST_RW_14
+
+Test register RW 14
+
+Address offset: 0x0038
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_14.svg[test_rw_14]
+
+[#table-TEST_RW_14,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_RW_15]]
+=== TEST_RW_15
+
+Test register RW 15
+
+Address offset: 0x003c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_rw_15.svg[test_rw_15]
+
+[#table-TEST_RW_15,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | rw              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_0]]
+=== TEST_W_0
+
+Test register W 0
+
+Address offset: 0x0040
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_0.svg[test_w_0]
+
+[#table-TEST_W_0,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_1]]
+=== TEST_W_1
+
+Test register W 1
+
+Address offset: 0x0044
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_1.svg[test_w_1]
+
+[#table-TEST_W_1,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_2]]
+=== TEST_W_2
+
+Test register W 2
+
+Address offset: 0x0048
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_2.svg[test_w_2]
+
+[#table-TEST_W_2,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_3]]
+=== TEST_W_3
+
+Test register W 3
+
+Address offset: 0x004c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_3.svg[test_w_3]
+
+[#table-TEST_W_3,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_4]]
+=== TEST_W_4
+
+Test register W 4
+
+Address offset: 0x0050
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_4.svg[test_w_4]
+
+[#table-TEST_W_4,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_5]]
+=== TEST_W_5
+
+Test register W 5
+
+Address offset: 0x0054
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_5.svg[test_w_5]
+
+[#table-TEST_W_5,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_6]]
+=== TEST_W_6
+
+Test register W 6
+
+Address offset: 0x0058
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_6.svg[test_w_6]
+
+[#table-TEST_W_6,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_7]]
+=== TEST_W_7
+
+Test register W 7
+
+Address offset: 0x005c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_7.svg[test_w_7]
+
+[#table-TEST_W_7,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_8]]
+=== TEST_W_8
+
+Test register W 8
+
+Address offset: 0x0060
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_8.svg[test_w_8]
+
+[#table-TEST_W_8,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_9]]
+=== TEST_W_9
+
+Test register W 9
+
+Address offset: 0x0064
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_9.svg[test_w_9]
+
+[#table-TEST_W_9,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_10]]
+=== TEST_W_10
+
+Test register W 10
+
+Address offset: 0x0068
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_10.svg[test_w_10]
+
+[#table-TEST_W_10,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_11]]
+=== TEST_W_11
+
+Test register W 11
+
+Address offset: 0x006c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_11.svg[test_w_11]
+
+[#table-TEST_W_11,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_12]]
+=== TEST_W_12
+
+Test register W 12
+
+Address offset: 0x0070
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_12.svg[test_w_12]
+
+[#table-TEST_W_12,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_13]]
+=== TEST_W_13
+
+Test register W 13
+
+Address offset: 0x0074
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_13.svg[test_w_13]
+
+[#table-TEST_W_13,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_14]]
+=== TEST_W_14
+
+Test register W 14
+
+Address offset: 0x0078
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_14.svg[test_w_14]
+
+[#table-TEST_W_14,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_W_15]]
+=== TEST_W_15
+
+Test register W 15
+
+Address offset: 0x007c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_w_15.svg[test_w_15]
+
+[#table-TEST_W_15,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | wo              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_0]]
+=== TEST_R_0
+
+Test register R 0
+
+Address offset: 0x0080
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_0.svg[test_r_0]
+
+[#table-TEST_R_0,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_1]]
+=== TEST_R_1
+
+Test register R 1
+
+Address offset: 0x0084
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_1.svg[test_r_1]
+
+[#table-TEST_R_1,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_2]]
+=== TEST_R_2
+
+Test register R 2
+
+Address offset: 0x0088
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_2.svg[test_r_2]
+
+[#table-TEST_R_2,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_3]]
+=== TEST_R_3
+
+Test register R 3
+
+Address offset: 0x008c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_3.svg[test_r_3]
+
+[#table-TEST_R_3,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_4]]
+=== TEST_R_4
+
+Test register R 4
+
+Address offset: 0x0090
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_4.svg[test_r_4]
+
+[#table-TEST_R_4,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_5]]
+=== TEST_R_5
+
+Test register R 5
+
+Address offset: 0x0094
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_5.svg[test_r_5]
+
+[#table-TEST_R_5,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_6]]
+=== TEST_R_6
+
+Test register R 6
+
+Address offset: 0x0098
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_6.svg[test_r_6]
+
+[#table-TEST_R_6,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_7]]
+=== TEST_R_7
+
+Test register R 7
+
+Address offset: 0x009c
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_7.svg[test_r_7]
+
+[#table-TEST_R_7,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_8]]
+=== TEST_R_8
+
+Test register R 8
+
+Address offset: 0x00a0
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_8.svg[test_r_8]
+
+[#table-TEST_R_8,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_9]]
+=== TEST_R_9
+
+Test register R 9
+
+Address offset: 0x00a4
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_9.svg[test_r_9]
+
+[#table-TEST_R_9,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_10]]
+=== TEST_R_10
+
+Test register R 10
+
+Address offset: 0x00a8
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_10.svg[test_r_10]
+
+[#table-TEST_R_10,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_11]]
+=== TEST_R_11
+
+Test register R 11
+
+Address offset: 0x00ac
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_11.svg[test_r_11]
+
+[#table-TEST_R_11,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_12]]
+=== TEST_R_12
+
+Test register R 12
+
+Address offset: 0x00b0
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_12.svg[test_r_12]
+
+[#table-TEST_R_12,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_13]]
+=== TEST_R_13
+
+Test register R 13
+
+Address offset: 0x00b4
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_13.svg[test_r_13]
+
+[#table-TEST_R_13,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_14]]
+=== TEST_R_14
+
+Test register R 14
+
+Address offset: 0x00b8
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_14.svg[test_r_14]
+
+[#table-TEST_R_14,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>
+
+[[TEST_R_15]]
+=== TEST_R_15
+
+Test register R 15
+
+Address offset: 0x00bc
+
+Reset value: 0x00000000
+
+image::adoc_img/test_r_15.svg[test_r_15]
+
+[#table-TEST_R_15,cols="1,1,1,1,1", options="header"]
+|==========================
+| Name | Bits | Mode | Reset | Description
+| data             | 31:0   | ro              | 0x00000000 | Test data field
+|==========================
+
+
+Back to  <<register_map_summary>>

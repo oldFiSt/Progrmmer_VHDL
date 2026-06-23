@@ -1,0 +1,298 @@
+// Тестбенч для модуля pkt2axil_top
+// Модуль преобразует AXI Stream пакеты в AXI-Lite транзакции и обратно
+// К AXI-Lite интерфейсу подключен тестовый модуль regs (карта регистров)
+
+module pkt2axil_top_tb;
+
+    // Параметры
+    parameter TDATA_WIDTH = 64;
+    parameter TKEEP_WIDTH = TDATA_WIDTH / 8;
+    parameter TUSER_WIDTH = 8;
+
+    // Тактовые сигналы
+    logic clk;
+    logic rstn;
+
+    // AXI Stream входы тестбенча
+    logic [TDATA_WIDTH-1:0]  s_axis_tdata;
+    logic [TKEEP_WIDTH-1:0]  s_axis_tkeep;
+    logic [TUSER_WIDTH-1:0]  s_axis_tuser;
+    logic                    s_axis_tvalid;
+    logic                    s_axis_tready;
+    logic                    s_axis_tlast;
+
+    // AXI Stream выходы тестбенча
+    logic [TDATA_WIDTH-1:0]  m_axis_tdata;
+    logic [TKEEP_WIDTH-1:0]  m_axis_tkeep;
+    logic [TUSER_WIDTH-1:0]  m_axis_tuser;
+    logic                    m_axis_tvalid;
+    logic                    m_axis_tready;
+    logic                    m_axis_tlast;
+
+    // AXI-Lite интерфейс (подключен к regs)
+    logic                    axil_awvalid;
+    logic                    axil_awready;
+    logic            [31:0]  axil_awaddr;
+    logic             [2:0]  axil_awprot;
+    
+    logic                    axil_wvalid;
+    logic                    axil_wready;
+    logic            [31:0]  axil_wdata;
+    logic             [3:0]  axil_wstrb;
+    
+    logic                    axil_bvalid;
+    logic                    axil_bready;
+    logic             [1:0]  axil_bresp;
+    
+    logic                    axil_arvalid;
+    logic                    axil_arready;
+    logic            [31:0]  axil_araddr;
+    logic             [2:0]  axil_arprot;
+    
+    logic                    axil_rvalid;
+    logic                    axil_rready;
+    logic            [31:0]  axil_rdata;
+    logic             [1:0]  axil_rresp;
+
+    // ============================================================================
+    // Мониторинг AXI-Lite шины для тестов
+    // ============================================================================
+    
+    // Регистры для мониторинга Write транзакций (отдельные сигналы для удобства доступа из Python)
+    logic            [31:0]  axil_monitor_write_addr;
+    logic            [31:0]  axil_monitor_write_data;
+    logic             [3:0]  axil_monitor_write_strb;
+    logic             [2:0]  axil_monitor_write_prot;
+    logic                    axil_monitor_write_valid;
+    logic                    axil_monitor_write_captured;
+    
+    // Регистры для мониторинга Read транзакций
+    logic            [31:0]  axil_monitor_read_addr;
+    logic             [2:0]  axil_monitor_read_prot;
+    logic                    axil_monitor_read_valid;
+    logic                    axil_monitor_read_captured;
+    
+    // Логика захвата Write транзакций
+    always_ff @(posedge clk or negedge rstn) begin
+        if (!rstn) begin
+            axil_monitor_write_addr <= 32'h0;
+            axil_monitor_write_data <= 32'h0;
+            axil_monitor_write_strb <= 4'h0;
+            axil_monitor_write_prot <= 3'h0;
+            axil_monitor_write_valid <= 1'b0;
+            axil_monitor_write_captured <= 1'b0;
+        end else begin
+            // Захватываем транзакцию при рукопожатии AW и W каналов
+            if (axil_awvalid && axil_awready && axil_wvalid && axil_wready) begin
+                axil_monitor_write_addr <= axil_awaddr;
+                axil_monitor_write_data <= axil_wdata;
+                axil_monitor_write_strb <= axil_wstrb;
+                axil_monitor_write_prot <= axil_awprot;
+                axil_monitor_write_valid <= 1'b1;
+                axil_monitor_write_captured <= 1'b1;
+            end else begin
+                axil_monitor_write_valid <= 1'b0;
+                if (axil_monitor_write_captured) begin
+                    axil_monitor_write_captured <= 1'b0;
+                end
+            end
+        end
+    end
+    
+    // Логика захвата Read транзакций
+    always_ff @(posedge clk or negedge rstn) begin
+        if (!rstn) begin
+            axil_monitor_read_addr <= 32'h0;
+            axil_monitor_read_prot <= 3'h0;
+            axil_monitor_read_valid <= 1'b0;
+            axil_monitor_read_captured <= 1'b0;
+        end else begin
+            // Захватываем транзакцию при рукопожатии AR канала
+            if (axil_arvalid && axil_arready) begin
+                axil_monitor_read_addr <= axil_araddr;
+                axil_monitor_read_prot <= axil_arprot;
+                axil_monitor_read_valid <= 1'b1;
+                axil_monitor_read_captured <= 1'b1;
+            end else begin
+                axil_monitor_read_valid <= 1'b0;
+                if (axil_monitor_read_captured) begin
+                    axil_monitor_read_captured <= 1'b0;
+                end
+            end
+        end
+    end
+    
+    // ============================================================================
+    // Сигналы для модуля regs (новая карта регистров)
+    // TEST_RW_0 до TEST_RW_15: hardware: o (выходы для RW регистров)
+    logic [31:0] csr_test_rw_0_data_out;
+    logic [31:0] csr_test_rw_1_data_out;
+    logic [31:0] csr_test_rw_2_data_out;
+    logic [31:0] csr_test_rw_3_data_out;
+    logic [31:0] csr_test_rw_4_data_out;
+    logic [31:0] csr_test_rw_5_data_out;
+    logic [31:0] csr_test_rw_6_data_out;
+    logic [31:0] csr_test_rw_7_data_out;
+    logic [31:0] csr_test_rw_8_data_out;
+    logic [31:0] csr_test_rw_9_data_out;
+    logic [31:0] csr_test_rw_10_data_out;
+    logic [31:0] csr_test_rw_11_data_out;
+    logic [31:0] csr_test_rw_12_data_out;
+    logic [31:0] csr_test_rw_13_data_out;
+    logic [31:0] csr_test_rw_14_data_out;
+    logic [31:0] csr_test_rw_15_data_out;
+    
+    // TEST_W_0 до TEST_W_15: hardware: o (выходы для W регистров)
+    logic [31:0] csr_test_w_0_data_out;
+    logic [31:0] csr_test_w_1_data_out;
+    logic [31:0] csr_test_w_2_data_out;
+    logic [31:0] csr_test_w_3_data_out;
+    logic [31:0] csr_test_w_4_data_out;
+    logic [31:0] csr_test_w_5_data_out;
+    logic [31:0] csr_test_w_6_data_out;
+    logic [31:0] csr_test_w_7_data_out;
+    logic [31:0] csr_test_w_8_data_out;
+    logic [31:0] csr_test_w_9_data_out;
+    logic [31:0] csr_test_w_10_data_out;
+    logic [31:0] csr_test_w_11_data_out;
+    logic [31:0] csr_test_w_12_data_out;
+    logic [31:0] csr_test_w_13_data_out;
+    logic [31:0] csr_test_w_14_data_out;
+    logic [31:0] csr_test_w_15_data_out;
+    
+    // TEST_R_0 до TEST_R_15: hardware: i (входы для R регистров)
+    logic [31:0] csr_test_r_0_data_in;
+    logic [31:0] csr_test_r_1_data_in;
+    logic [31:0] csr_test_r_2_data_in;
+    logic [31:0] csr_test_r_3_data_in;
+    logic [31:0] csr_test_r_4_data_in;
+    logic [31:0] csr_test_r_5_data_in;
+    logic [31:0] csr_test_r_6_data_in;
+    logic [31:0] csr_test_r_7_data_in;
+    logic [31:0] csr_test_r_8_data_in;
+    logic [31:0] csr_test_r_9_data_in;
+    logic [31:0] csr_test_r_10_data_in;
+    logic [31:0] csr_test_r_11_data_in;
+    logic [31:0] csr_test_r_12_data_in;
+    logic [31:0] csr_test_r_13_data_in;
+    logic [31:0] csr_test_r_14_data_in;
+    logic [31:0] csr_test_r_15_data_in;
+
+    // Модуль pkt2axil_top
+    pkt2axil_top #(
+        .TDATA_WIDTH(TDATA_WIDTH),
+        .TKEEP_WIDTH(TKEEP_WIDTH),
+        .TUSER_WIDTH(TUSER_WIDTH)
+    ) dut (
+        .clk(clk),
+        .rstn(rstn),
+        
+        // AXI Stream вход
+        .s_axis_tdata(s_axis_tdata),
+        .s_axis_tkeep(s_axis_tkeep),
+        .s_axis_tuser(s_axis_tuser),
+        .s_axis_tvalid(s_axis_tvalid),
+        .s_axis_tready(s_axis_tready),
+        .s_axis_tlast(s_axis_tlast),
+        
+        // AXI Stream выход
+        .m_axis_tdata(m_axis_tdata),
+        .m_axis_tkeep(m_axis_tkeep),
+        .m_axis_tuser(m_axis_tuser),
+        .m_axis_tvalid(m_axis_tvalid),
+        .m_axis_tready(m_axis_tready),
+        .m_axis_tlast(m_axis_tlast),
+        
+        // AXI-Lite Write Address Channel
+        .axil_awvalid(axil_awvalid),
+        .axil_awready(axil_awready),
+        .axil_awaddr(axil_awaddr),
+        .axil_awprot(axil_awprot),
+        
+        // AXI-Lite Write Data Channel
+        .axil_wvalid(axil_wvalid),
+        .axil_wready(axil_wready),
+        .axil_wdata(axil_wdata),
+        .axil_wstrb(axil_wstrb),
+        
+        // AXI-Lite Write Response Channel
+        .axil_bvalid(axil_bvalid),
+        .axil_bready(axil_bready),
+        .axil_bresp(axil_bresp),
+        
+        // AXI-Lite Read Address Channel
+        .axil_arvalid(axil_arvalid),
+        .axil_arready(axil_arready),
+        .axil_araddr(axil_araddr),
+        .axil_arprot(axil_arprot),
+        
+        // AXI-Lite Read Data Channel
+        .axil_rvalid(axil_rvalid),
+        .axil_rready(axil_rready),
+        .axil_rdata(axil_rdata),
+        .axil_rresp(axil_rresp)
+    );
+
+    // Модуль regs (тестовая карта регистров из test_regmap/regs.yaml)
+    // Инициализация read-only регистров (TEST_R_0 до TEST_R_15)
+    initial begin
+        csr_test_r_0_data_in = 32'h0;
+        csr_test_r_1_data_in = 32'h0;
+        csr_test_r_2_data_in = 32'h0;
+        csr_test_r_3_data_in = 32'h0;
+        csr_test_r_4_data_in = 32'h0;
+        csr_test_r_5_data_in = 32'h0;
+        csr_test_r_6_data_in = 32'h0;
+        csr_test_r_7_data_in = 32'h0;
+        csr_test_r_8_data_in = 32'h0;
+        csr_test_r_9_data_in = 32'h0;
+        csr_test_r_10_data_in = 32'h0;
+        csr_test_r_11_data_in = 32'h0;
+        csr_test_r_12_data_in = 32'h0;
+        csr_test_r_13_data_in = 32'h0;
+        csr_test_r_14_data_in = 32'h0;
+        csr_test_r_15_data_in = 32'h0;
+    end
+    
+    // Подключение модуля regs из test_regmap/hw/regs.v
+    // Примечание: если модуль regs еще не перегенерирован из новой карты,
+    // нужно сначала сгенерировать его из test_regmap/regs.yaml
+    regs #(
+        .ADDR_W(16),
+        .DATA_W(32),
+        .STRB_W(4)
+    ) regs_inst (
+        .clk(clk),
+        .rst(!rstn),  // regs использует активный высокий уровень сброса
+        
+        // AXI-Lite интерфейс
+        .axil_awaddr(axil_awaddr[15:0]),  // regs использует 16-битные адреса
+        .axil_awprot(axil_awprot),
+        .axil_awvalid(axil_awvalid),
+        .axil_awready(axil_awready),
+        
+        .axil_wdata(axil_wdata),
+        .axil_wstrb(axil_wstrb),
+        .axil_wvalid(axil_wvalid),
+        .axil_wready(axil_wready),
+        
+        .axil_bresp(axil_bresp),
+        .axil_bvalid(axil_bvalid),
+        .axil_bready(axil_bready),
+        
+        .axil_araddr(axil_araddr[15:0]),  // regs использует 16-битные адреса
+        .axil_arprot(axil_arprot),
+        .axil_arvalid(axil_arvalid),
+        .axil_arready(axil_arready),
+        
+        .axil_rdata(axil_rdata),
+        .axil_rresp(axil_rresp),
+        .axil_rvalid(axil_rvalid),
+        .axil_rready(axil_rready)
+        
+        // Примечание: после перегенерации regs.v из новой карты регистров
+        // нужно подключить сигналы для TEST_RW_*, TEST_W_*, TEST_R_*
+    );
+
+endmodule
+
