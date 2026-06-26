@@ -1,232 +1,102 @@
-module float_discriminant #(
-    parameter FLEN = 64
-) (
-    input                     clk,
-    input                     rst,
+module a_plus_b_using_fifos_and_double_buffer
+# (
+    parameter width = 8, depth = 10
+)
+(
+    input                clk,
+    input                rst,
 
-    input                     arg_vld,
-    input        [FLEN - 1:0] a,
-    input        [FLEN - 1:0] b,
-    input        [FLEN - 1:0] c,
+    input                a_valid,
+    output logic         a_ready,
+    input  [width - 1:0] a_data,
 
-    output logic              res_vld,
-    output logic [FLEN - 1:0] res,
-    output logic              res_negative,
-    output logic              err,
+    input                b_valid,
+    output logic         b_ready,
+    input  [width - 1:0] b_data,
 
-    output logic              busy
+    output logic         sum_valid,
+    input                sum_ready,
+    output logic [width - 1:0] sum_data
 );
 
-    // -------- NaN / Inf detection for FP64 (exp all ones) ----------
-    function automatic logic is_nan_or_inf(input logic [FLEN-1:0] x);
-        logic [10:0] exp;
-        exp = x[62:52];
-        is_nan_or_inf = &exp; // exp==all1 => NaN or Inf
-    endfunction
+    wire               a_fifo_push;
+    wire               a_fifo_pop;
+    wire [width - 1:0] a_fifo_write_data;
+    wire [width - 1:0] a_fifo_read_data;
+    wire               a_fifo_empty;
+    wire               a_fifo_full;
 
-    localparam logic [FLEN-1:0] FP64_4P0 = 64'h4010_0000_0000_0000; // 4.0
-
-    // -------- f_mult / f_sub instances ----------
-    logic [FLEN-1:0] mult_bb_a, mult_bb_b, mult_bb_res;
-    logic            mult_bb_up_valid, mult_bb_down_valid, mult_bb_busy, mult_bb_error;
-
-    logic [FLEN-1:0] mult_ac_a, mult_ac_b, mult_ac_res;
-    logic            mult_ac_up_valid, mult_ac_down_valid, mult_ac_busy, mult_ac_error;
-
-    logic [FLEN-1:0] mult_4ac_a, mult_4ac_b, mult_4ac_res;
-    logic            mult_4ac_up_valid, mult_4ac_down_valid, mult_4ac_busy, mult_4ac_error;
-
-    logic [FLEN-1:0] sub_a, sub_b, sub_res;
-    logic            sub_up_valid, sub_down_valid, sub_busy_i, sub_error;
-
-    f_mult #(.FLEN(FLEN)) u_mult_bb (
-        .clk(clk), .rst(rst),
-        .a(mult_bb_a), .b(mult_bb_b),
-        .up_valid(mult_bb_up_valid),
-        .res(mult_bb_res),
-        .down_valid(mult_bb_down_valid),
-        .busy(mult_bb_busy),
-        .error(mult_bb_error)
+    flip_flop_fifo_with_counter
+    # (.width (width), .depth (depth))
+    fifo_a
+    (
+        .clk         ( clk               ),
+        .rst         ( rst               ),
+        .push        ( a_fifo_push       ),
+        .pop         ( a_fifo_pop        ),
+        .write_data  ( a_fifo_write_data ),
+        .read_data   ( a_fifo_read_data  ),
+        .empty       ( a_fifo_empty      ),
+        .full        ( a_fifo_full       )
     );
 
-    f_mult #(.FLEN(FLEN)) u_mult_ac (
-        .clk(clk), .rst(rst),
-        .a(mult_ac_a), .b(mult_ac_b),
-        .up_valid(mult_ac_up_valid),
-        .res(mult_ac_res),
-        .down_valid(mult_ac_down_valid),
-        .busy(mult_ac_busy),
-        .error(mult_ac_error)
+    // Прием в FIFO-A
+    assign a_ready           = !a_fifo_full;
+    assign a_fifo_push       = a_valid && a_ready;
+    assign a_fifo_write_data = a_data;
+
+    wire               b_fifo_push;
+    wire               b_fifo_pop;
+    wire [width - 1:0] b_fifo_write_data;
+    wire [width - 1:0] b_fifo_read_data;
+    wire               b_fifo_empty;
+    wire               b_fifo_full;
+
+    flip_flop_fifo_with_counter
+    # (.width (width), .depth (depth))
+    fifo_b
+    (
+        .clk         ( clk               ),
+        .rst         ( rst               ),
+        .push        ( b_fifo_push       ),
+        .pop         ( b_fifo_pop        ),
+        .write_data  ( b_fifo_write_data ),
+        .read_data   ( b_fifo_read_data  ),
+        .empty       ( b_fifo_empty      ),
+        .full        ( b_fifo_full       )
     );
 
-    f_mult #(.FLEN(FLEN)) u_mult_4ac (
-        .clk(clk), .rst(rst),
-        .a(mult_4ac_a), .b(mult_4ac_b),
-        .up_valid(mult_4ac_up_valid),
-        .res(mult_4ac_res),
-        .down_valid(mult_4ac_down_valid),
-        .busy(mult_4ac_busy),
-        .error(mult_4ac_error)
+    // Прием в FIFO-B
+    assign b_ready           = !b_fifo_full;
+    assign b_fifo_push       = b_valid && b_ready;
+    assign b_fifo_write_data = b_data;
+
+    wire               sum_up_valid;
+    wire               sum_up_ready;
+    wire [width - 1:0] sum_up_data;
+
+    // Суммирование и передача в double buffer
+    assign sum_up_valid = !a_fifo_empty && !b_fifo_empty;
+    assign sum_up_data  = a_fifo_read_data + b_fifo_read_data;
+
+    // Из FIFO извлекаем только когда buffer готов принять сумму
+    assign a_fifo_pop = sum_up_valid && sum_up_ready;
+    assign b_fifo_pop = sum_up_valid && sum_up_ready;
+
+    double_buffer_from_dally_harting
+    # (.width (width))
+    buffer_sum
+    (
+        .clk         ( clk          ),
+        .rst         ( rst          ),
+
+        .up_valid    ( sum_up_valid ),
+        .up_ready    ( sum_up_ready ),
+        .up_data     ( sum_up_data  ),
+
+        .down_valid  ( sum_valid    ),
+        .down_ready  ( sum_ready    ),
+        .down_data   ( sum_data     )
     );
-
-    f_sub #(.FLEN(FLEN)) u_sub (
-        .clk(clk), .rst(rst),
-        .a(sub_a), .b(sub_b),
-        .up_valid(sub_up_valid),
-        .res(sub_res),
-        .down_valid(sub_down_valid),
-        .busy(sub_busy_i),
-        .error(sub_error)
-    );
-
-    // -------- FSM ----------
-    typedef enum logic [2:0] {
-        ST_IDLE,
-        ST_LAUNCH_BB_AC,
-        ST_WAIT_BB_AC,
-        ST_LAUNCH_4AC,
-        ST_WAIT_4AC,
-        ST_LAUNCH_SUB,
-        ST_WAIT_SUB,
-        ST_OUT
-    } st_t;
-
-    st_t st;
-
-    logic [FLEN-1:0] a_r, b_r, c_r;
-    logic [FLEN-1:0] bb_r, ac_r, fourac_r;
-    logic            got_bb, got_ac;
-    logic            err_r;
-
-    assign busy = (st != ST_IDLE);
-
-    always_ff @(posedge clk) begin
-        if (rst) begin
-            st <= ST_IDLE;
-
-            a_r <= '0; b_r <= '0; c_r <= '0;
-            bb_r <= '0; ac_r <= '0; fourac_r <= '0;
-            got_bb <= 1'b0; got_ac <= 1'b0;
-            err_r <= 1'b0;
-
-            res_vld <= 1'b0;
-            res <= '0;
-            res_negative <= 1'b0;
-            err <= 1'b0;
-
-            mult_bb_up_valid <= 1'b0;
-            mult_ac_up_valid <= 1'b0;
-            mult_4ac_up_valid <= 1'b0;
-            sub_up_valid <= 1'b0;
-
-            mult_bb_a <= '0; mult_bb_b <= '0;
-            mult_ac_a <= '0; mult_ac_b <= '0;
-            mult_4ac_a <= '0; mult_4ac_b <= '0;
-            sub_a <= '0; sub_b <= '0;
-
-        end else begin
-            // default pulses
-            res_vld <= 1'b0;
-            mult_bb_up_valid <= 1'b0;
-            mult_ac_up_valid <= 1'b0;
-            mult_4ac_up_valid <= 1'b0;
-            sub_up_valid <= 1'b0;
-
-            // accumulate errors from blocks when results arrive
-            if (mult_bb_down_valid && mult_bb_error) err_r <= 1'b1;
-            if (mult_ac_down_valid && mult_ac_error) err_r <= 1'b1;
-            if (mult_4ac_down_valid && mult_4ac_error) err_r <= 1'b1;
-            if (sub_down_valid && sub_error) err_r <= 1'b1;
-
-            case (st)
-                ST_IDLE: begin
-                    err_r <= 1'b0;
-                    err   <= 1'b0;
-                    got_bb <= 1'b0;
-                    got_ac <= 1'b0;
-
-                    if (arg_vld) begin
-                        a_r <= a;
-                        b_r <= b;
-                        c_r <= c;
-
-                        if (is_nan_or_inf(a) || is_nan_or_inf(b) || is_nan_or_inf(c)) begin
-                            err_r <= 1'b1;
-                        end
-
-                        st <= ST_LAUNCH_BB_AC;
-                    end
-                end
-
-                ST_LAUNCH_BB_AC: begin
-                    // start b*b and a*c in parallel
-                    mult_bb_a <= b_r;
-                    mult_bb_b <= b_r;
-                    mult_bb_up_valid <= 1'b1;
-
-                    mult_ac_a <= a_r;
-                    mult_ac_b <= c_r;
-                    mult_ac_up_valid <= 1'b1;
-
-                    got_bb <= 1'b0;
-                    got_ac <= 1'b0;
-
-                    st <= ST_WAIT_BB_AC;
-                end
-
-                ST_WAIT_BB_AC: begin
-                    if (mult_bb_down_valid) begin
-                        bb_r <= mult_bb_res;
-                        got_bb <= 1'b1;
-                    end
-                    if (mult_ac_down_valid) begin
-                        ac_r <= mult_ac_res;
-                        got_ac <= 1'b1;
-                    end
-
-                    if (got_bb && got_ac) begin
-                        st <= ST_LAUNCH_4AC;
-                    end
-                end
-
-                ST_LAUNCH_4AC: begin
-                    mult_4ac_a <= FP64_4P0;
-                    mult_4ac_b <= ac_r;
-                    mult_4ac_up_valid <= 1'b1;
-                    st <= ST_WAIT_4AC;
-                end
-
-                ST_WAIT_4AC: begin
-                    if (mult_4ac_down_valid) begin
-                        fourac_r <= mult_4ac_res;
-                        st <= ST_LAUNCH_SUB;
-                    end
-                end
-
-                ST_LAUNCH_SUB: begin
-                    sub_a <= bb_r;
-                    sub_b <= fourac_r;
-                    sub_up_valid <= 1'b1;
-                    st <= ST_WAIT_SUB;
-                end
-
-                ST_WAIT_SUB: begin
-                    if (sub_down_valid) begin
-                        res <= sub_res;
-                        st  <= ST_OUT;
-                    end
-                end
-
-                ST_OUT: begin
-                    err <= err_r;
-                    res_vld <= 1'b1;
-                    res_negative <= (err_r) ? 1'b0 : res[63];
-                    st <= ST_IDLE;
-                end
-
-                default: st <= ST_IDLE;
-            endcase
-        end
-    end
 
 endmodule
